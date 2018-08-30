@@ -2,9 +2,9 @@ import * as Control from '@singleware/ui-control';
 import { Properties } from './properties';
 import { Element } from './element';
 /**
- * Progress bar class.
+ * Progress template class.
  */
-export declare class Bar extends Control.Component<Properties> {
+export declare class Template extends Control.Component<Properties> {
     /**
      * Progress states.
      */

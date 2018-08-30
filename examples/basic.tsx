@@ -8,10 +8,10 @@ import * as Progress from '../source';
 import * as DOM from '@singleware/jsx';
 
 const progressBar = (
-  <Progress.Bar>
+  <Progress.Template>
     <span slot="text">0%</span>
     <div slot="bar" />
-  </Progress.Bar>
+  </Progress.Template>
 ) as Progress.Element;
 
 /**

@@ -10,10 +10,10 @@ import { Properties } from './properties';
 import { Element } from './element';
 
 /**
- * Progress bar class.
+ * Progress template class.
  */
 @Class.Describe()
-export class Bar extends Control.Component<Properties> {
+export class Template extends Control.Component<Properties> {
   /**
    * Progress states.
    */
@@ -115,9 +115,9 @@ export class Bar extends Control.Component<Properties> {
   @Class.Private()
   private bindProperties(): void {
     Object.defineProperties(this.skeleton, {
-      name: super.bindDescriptor(Bar.prototype, 'name'),
-      value: super.bindDescriptor(Bar.prototype, 'value'),
-      total: super.bindDescriptor(Bar.prototype, 'total')
+      name: super.bindDescriptor(this, Template.prototype, 'name'),
+      value: super.bindDescriptor(this, Template.prototype, 'value'),
+      total: super.bindDescriptor(this, Template.prototype, 'total')
     });
   }
 

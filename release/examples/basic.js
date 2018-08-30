@@ -8,7 +8,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 const Progress = require("../source");
 const DOM = require("@singleware/jsx");
-const progressBar = (DOM.create(Progress.Bar, null,
+const progressBar = (DOM.create(Progress.Template, null,
     DOM.create("span", { slot: "text" }, "0%"),
     DOM.create("div", { slot: "bar" })));
 /**

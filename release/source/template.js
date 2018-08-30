@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Bar_1;
+var Template_1;
 "use strict";
 /**
  * Copyright (C) 2018 Silas B. Domingos
@@ -16,9 +16,9 @@ const Class = require("@singleware/class");
 const DOM = require("@singleware/jsx");
 const Control = require("@singleware/ui-control");
 /**
- * Progress bar class.
+ * Progress template class.
  */
-let Bar = Bar_1 = class Bar extends Control.Component {
+let Template = Template_1 = class Template extends Control.Component {
     /**
      * Default constructor.
      * @param properties Form properties.
@@ -102,9 +102,9 @@ let Bar = Bar_1 = class Bar extends Control.Component {
      */
     bindProperties() {
         Object.defineProperties(this.skeleton, {
-            name: super.bindDescriptor(Bar_1.prototype, 'name'),
-            value: super.bindDescriptor(Bar_1.prototype, 'value'),
-            total: super.bindDescriptor(Bar_1.prototype, 'total')
+            name: super.bindDescriptor(this, Template_1.prototype, 'name'),
+            value: super.bindDescriptor(this, Template_1.prototype, 'value'),
+            total: super.bindDescriptor(this, Template_1.prototype, 'total')
         });
     }
     /**
@@ -174,50 +174,50 @@ let Bar = Bar_1 = class Bar extends Control.Component {
 };
 __decorate([
     Class.Private()
-], Bar.prototype, "states", void 0);
+], Template.prototype, "states", void 0);
 __decorate([
     Class.Private()
-], Bar.prototype, "progressSlot", void 0);
+], Template.prototype, "progressSlot", void 0);
 __decorate([
     Class.Private()
-], Bar.prototype, "backgroundSlot", void 0);
+], Template.prototype, "backgroundSlot", void 0);
 __decorate([
     Class.Private()
-], Bar.prototype, "informationSlot", void 0);
+], Template.prototype, "informationSlot", void 0);
 __decorate([
     Class.Private()
-], Bar.prototype, "wrapper", void 0);
+], Template.prototype, "wrapper", void 0);
 __decorate([
     Class.Private()
-], Bar.prototype, "styles", void 0);
+], Template.prototype, "styles", void 0);
 __decorate([
     Class.Private()
-], Bar.prototype, "skeleton", void 0);
+], Template.prototype, "skeleton", void 0);
 __decorate([
     Class.Private()
-], Bar.prototype, "elements", void 0);
+], Template.prototype, "elements", void 0);
 __decorate([
     Class.Private()
-], Bar.prototype, "bindProperties", null);
+], Template.prototype, "bindProperties", null);
 __decorate([
     Class.Private()
-], Bar.prototype, "assignProperties", null);
+], Template.prototype, "assignProperties", null);
 __decorate([
     Class.Private()
-], Bar.prototype, "changeHandler", null);
+], Template.prototype, "changeHandler", null);
 __decorate([
     Class.Public()
-], Bar.prototype, "name", null);
+], Template.prototype, "name", null);
 __decorate([
     Class.Public()
-], Bar.prototype, "value", null);
+], Template.prototype, "value", null);
 __decorate([
     Class.Public()
-], Bar.prototype, "total", null);
+], Template.prototype, "total", null);
 __decorate([
     Class.Public()
-], Bar.prototype, "element", null);
-Bar = Bar_1 = __decorate([
+], Template.prototype, "element", null);
+Template = Template_1 = __decorate([
     Class.Describe()
-], Bar);
-exports.Bar = Bar;
+], Template);
+exports.Template = Template;
