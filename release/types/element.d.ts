@@ -6,13 +6,25 @@
 /**
  * Progress element interface.
  */
-export interface Element extends HTMLFormElement {
+export interface Element extends HTMLDivElement {
+  /**
+   * Progress name.
+   */
+  name: string;
   /**
    * Current position.
    */
   value: number;
   /**
+   * Default position.
+   */
+  defaultValue: number;
+  /**
    * Final position.
    */
   total: number;
+  /**
+   * Reset the progress to its initial value and state.
+   */
+  reset: () => void;
 }

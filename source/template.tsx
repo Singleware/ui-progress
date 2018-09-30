@@ -8,6 +8,7 @@ import * as Control from '@singleware/ui-control';
 
 import { Properties } from './properties';
 import { Element } from './element';
+import { States } from './states';
 
 /**
  * Progress template class.
@@ -20,46 +21,46 @@ export class Template extends Control.Component<Properties> {
   @Class.Private()
   private states = {
     name: '',
-    percent: 0,
+    percentage: 0,
     current: 0,
     total: 0
-  };
+  } as States;
 
   /**
    * Progress element.
    */
   @Class.Private()
-  private progressSlot: HTMLSlotElement = <slot name="progress" class="progress" /> as HTMLSlotElement;
+  private progressSlot = <slot name="progress" class="progress" /> as HTMLSlotElement;
 
   /**
    * Background element.
    */
   @Class.Private()
-  private backgroundSlot: HTMLSlotElement = <slot name="background" class="background" /> as HTMLSlotElement;
+  private backgroundSlot = <slot name="background" class="background" /> as HTMLSlotElement;
 
   /**
    * Information element.
    */
   @Class.Private()
-  private informationSlot: HTMLSlotElement = <slot name="information" class="information" /> as HTMLSlotElement;
+  private informationSlot = <slot name="information" class="information" /> as HTMLSlotElement;
 
   /**
    * Wrapper element.
    */
   @Class.Private()
-  private wrapper: HTMLElement = (
+  private wrapper = (
     <div class="wrapper">
       {this.backgroundSlot}
       {this.progressSlot}
       {this.informationSlot}
     </div>
-  ) as HTMLElement;
+  ) as HTMLDivElement;
 
   /**
    * Form styles.
    */
   @Class.Private()
-  private styles: HTMLStyleElement = (
+  private styles = (
     <style>
       {`:host > .wrapper {
   position: relative;
@@ -97,28 +98,18 @@ export class Template extends Control.Component<Properties> {
    * Progress skeleton.
    */
   @Class.Private()
-  private skeleton: Element = (
+  private skeleton = (
     <div slot={this.properties.slot} class={this.properties.class}>
       {this.children}
     </div>
   ) as Element;
 
   /**
-   * Progress elements.
-   */
-  @Class.Private()
-  private elements: ShadowRoot = DOM.append(this.skeleton.attachShadow({ mode: 'closed' }), this.styles, this.wrapper) as ShadowRoot;
-
-  /**
    * Bind exposed properties to the custom element.
    */
   @Class.Private()
   private bindProperties(): void {
-    Object.defineProperties(this.skeleton, {
-      name: super.bindDescriptor(this, Template.prototype, 'name'),
-      value: super.bindDescriptor(this, Template.prototype, 'value'),
-      total: super.bindDescriptor(this, Template.prototype, 'total')
-    });
+    this.bindComponentProperties(this.skeleton, ['name', 'value', 'total']);
   }
 
   /**
@@ -126,7 +117,7 @@ export class Template extends Control.Component<Properties> {
    */
   @Class.Private()
   private assignProperties(): void {
-    Control.assignProperties(this, this.properties, ['name', 'value', 'total']);
+    this.assignComponentProperties(this.properties, ['name', 'value', 'total']);
     this.changeHandler();
   }
 
@@ -135,23 +126,24 @@ export class Template extends Control.Component<Properties> {
    */
   @Class.Private()
   private changeHandler(): void {
-    this.states.percent = (this.states.current * 100) / this.states.total;
-    this.progressSlot.style.width = `${this.states.percent.toFixed(2)}%`;
+    this.states.percentage = (this.states.current * 100) / this.states.total;
+    this.progressSlot.style.width = `${this.states.percentage.toFixed(2)}%`;
     const children = this.informationSlot.assignedNodes();
     for (const child of children) {
       if (child instanceof HTMLElement) {
-        child.innerText = `${this.states.percent.toFixed(0)}%`;
+        child.innerText = `${this.states.percentage.toFixed(0)}%`;
       }
     }
   }
 
   /**
    * Default constructor.
-   * @param properties Form properties.
-   * @param children Form children.
+   * @param properties Progress properties.
+   * @param children Progress children.
    */
   constructor(properties?: Properties, children?: any[]) {
     super(properties, children);
+    DOM.append(this.skeleton.attachShadow({ mode: 'closed' }), this.styles, this.wrapper);
     this.bindProperties();
     this.assignProperties();
   }
@@ -188,6 +180,14 @@ export class Template extends Control.Component<Properties> {
   }
 
   /**
+   * Get default progress value.
+   */
+  @Class.Public()
+  public get defaultValue(): number {
+    return this.properties.value || 0;
+  }
+
+  /**
    * Get final position.
    */
   @Class.Public()
@@ -209,5 +209,14 @@ export class Template extends Control.Component<Properties> {
   @Class.Public()
   public get element(): Element {
     return this.skeleton;
+  }
+
+  /**
+   * Reset the progress to its initial value and state.
+   */
+  @Class.Public()
+  public reset(): void {
+    this.value = this.defaultValue;
+    this.changeHandler();
   }
 }

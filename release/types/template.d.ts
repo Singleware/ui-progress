@@ -34,10 +34,6 @@ export declare class Template extends Control.Component<Properties> {
      */
     private skeleton;
     /**
-     * Progress elements.
-     */
-    private elements;
-    /**
      * Bind exposed properties to the custom element.
      */
     private bindProperties;
@@ -51,8 +47,8 @@ export declare class Template extends Control.Component<Properties> {
     private changeHandler;
     /**
      * Default constructor.
-     * @param properties Form properties.
-     * @param children Form children.
+     * @param properties Progress properties.
+     * @param children Progress children.
      */
     constructor(properties?: Properties, children?: any[]);
     /**
@@ -70,6 +66,10 @@ export declare class Template extends Control.Component<Properties> {
     */
     value: number;
     /**
+     * Get default progress value.
+     */
+    readonly defaultValue: number;
+    /**
      * Get final position.
      */
     /**
@@ -80,4 +80,8 @@ export declare class Template extends Control.Component<Properties> {
      * Progress element.
      */
     readonly element: Element;
+    /**
+     * Reset the progress to its initial value and state.
+     */
+    reset(): void;
 }

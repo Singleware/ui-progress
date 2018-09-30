@@ -6,8 +6,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Template_1;
-"use strict";
 /**
  * Copyright (C) 2018 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
@@ -18,11 +16,11 @@ const Control = require("@singleware/ui-control");
 /**
  * Progress template class.
  */
-let Template = Template_1 = class Template extends Control.Component {
+let Template = class Template extends Control.Component {
     /**
      * Default constructor.
-     * @param properties Form properties.
-     * @param children Form children.
+     * @param properties Progress properties.
+     * @param children Progress children.
      */
     constructor(properties, children) {
         super(properties, children);
@@ -31,7 +29,7 @@ let Template = Template_1 = class Template extends Control.Component {
          */
         this.states = {
             name: '',
-            percent: 0,
+            percentage: 0,
             current: 0,
             total: 0
         };
@@ -90,10 +88,7 @@ let Template = Template_1 = class Template extends Control.Component {
          * Progress skeleton.
          */
         this.skeleton = (DOM.create("div", { slot: this.properties.slot, class: this.properties.class }, this.children));
-        /**
-         * Progress elements.
-         */
-        this.elements = DOM.append(this.skeleton.attachShadow({ mode: 'closed' }), this.styles, this.wrapper);
+        DOM.append(this.skeleton.attachShadow({ mode: 'closed' }), this.styles, this.wrapper);
         this.bindProperties();
         this.assignProperties();
     }
@@ -101,29 +96,25 @@ let Template = Template_1 = class Template extends Control.Component {
      * Bind exposed properties to the custom element.
      */
     bindProperties() {
-        Object.defineProperties(this.skeleton, {
-            name: super.bindDescriptor(this, Template_1.prototype, 'name'),
-            value: super.bindDescriptor(this, Template_1.prototype, 'value'),
-            total: super.bindDescriptor(this, Template_1.prototype, 'total')
-        });
+        this.bindComponentProperties(this.skeleton, ['name', 'value', 'total']);
     }
     /**
      * Assign all elements properties.
      */
     assignProperties() {
-        Control.assignProperties(this, this.properties, ['name', 'value', 'total']);
+        this.assignComponentProperties(this.properties, ['name', 'value', 'total']);
         this.changeHandler();
     }
     /**
      * Change event handler.
      */
     changeHandler() {
-        this.states.percent = (this.states.current * 100) / this.states.total;
-        this.progressSlot.style.width = `${this.states.percent.toFixed(2)}%`;
+        this.states.percentage = (this.states.current * 100) / this.states.total;
+        this.progressSlot.style.width = `${this.states.percentage.toFixed(2)}%`;
         const children = this.informationSlot.assignedNodes();
         for (const child of children) {
             if (child instanceof HTMLElement) {
-                child.innerText = `${this.states.percent.toFixed(0)}%`;
+                child.innerText = `${this.states.percentage.toFixed(0)}%`;
             }
         }
     }
@@ -153,6 +144,12 @@ let Template = Template_1 = class Template extends Control.Component {
         this.changeHandler();
     }
     /**
+     * Get default progress value.
+     */
+    get defaultValue() {
+        return this.properties.value || 0;
+    }
+    /**
      * Get final position.
      */
     get total() {
@@ -170,6 +167,13 @@ let Template = Template_1 = class Template extends Control.Component {
      */
     get element() {
         return this.skeleton;
+    }
+    /**
+     * Reset the progress to its initial value and state.
+     */
+    reset() {
+        this.value = this.defaultValue;
+        this.changeHandler();
     }
 };
 __decorate([
@@ -195,9 +199,6 @@ __decorate([
 ], Template.prototype, "skeleton", void 0);
 __decorate([
     Class.Private()
-], Template.prototype, "elements", void 0);
-__decorate([
-    Class.Private()
 ], Template.prototype, "bindProperties", null);
 __decorate([
     Class.Private()
@@ -213,11 +214,17 @@ __decorate([
 ], Template.prototype, "value", null);
 __decorate([
     Class.Public()
+], Template.prototype, "defaultValue", null);
+__decorate([
+    Class.Public()
 ], Template.prototype, "total", null);
 __decorate([
     Class.Public()
 ], Template.prototype, "element", null);
-Template = Template_1 = __decorate([
+__decorate([
+    Class.Public()
+], Template.prototype, "reset", null);
+Template = __decorate([
     Class.Describe()
 ], Template);
 exports.Template = Template;
