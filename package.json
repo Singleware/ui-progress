@@ -7,7 +7,7 @@
   "name": "@singleware/ui-progress",
   "description": "Singleware UI progress package.",
   "license": "MIT",
-  "version": "1.0.14",
+  "version": "1.0.17",
   "main": "release/source/index.js",
   "types": "release/types/index.d.ts",
   "keywords": [
@@ -22,27 +22,29 @@
     "type": "git",
     "url": "https://github.com/singleware/ui-progress"
   },
-  "engines": {
-    "node": ">=8"
-  },
   "dependencies": {
-    "@singleware/class": "^1.1.12",
-    "@singleware/jsx": "^1.0.12",
-    "@singleware/ui-control": "^1.1.2"
+    "@singleware/class": "^1.1.19",
+    "@singleware/jsx": "^1.0.32",
+    "@singleware/ui-control": "^1.1.10"
   },
   "devDependencies": {
-    "prettier": "^1.14.3",
+    "prettier": "^2.0.5",
     "typescript": "^2.9.2"
   },
   "prettier": {
-    "printWidth": 140,
+    "endOfLine": "lf",
+    "trailingComma": "none",
+    "printWidth": 145,
     "tabWidth": 2,
     "singleQuote": true,
     "semi": true
   },
   "scripts": {
-    "build": "npm run make && npm run update",
-    "make": "tsc",
+    "build": "npm run clean && npm run make && npm run update",
+    "clean": "rm -rf ./release",
+    "make": "npm run compile-source && npm run compile-examples",
+    "compile-source": "npx tsc -p ./source",
+    "compile-examples": "npx tsc -p ./examples",
     "update": "cp -Rf ./source/*.d.ts ./release/types"
   }
 }

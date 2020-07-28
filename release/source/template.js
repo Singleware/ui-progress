@@ -7,11 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
- * Copyright (C) 2018 Silas B. Domingos
+ * Copyright (C) 2018-2020 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
 const Class = require("@singleware/class");
-const DOM = require("@singleware/jsx");
+const JSX = require("@singleware/jsx");
 const Control = require("@singleware/ui-control");
 /**
  * Progress template class.
@@ -36,32 +36,33 @@ let Template = class Template extends Control.Component {
         /**
          * Progress element.
          */
-        this.progressSlot = DOM.create("slot", { name: "progress", class: "progress" });
+        this.progressSlot = (JSX.create("slot", { name: "progress", class: "progress" }));
         /**
          * Background element.
          */
-        this.backgroundSlot = DOM.create("slot", { name: "background", class: "background" });
+        this.backgroundSlot = (JSX.create("slot", { name: "background", class: "background" }));
         /**
          * Information element.
          */
-        this.informationSlot = DOM.create("slot", { name: "information", class: "information" });
+        this.informationSlot = (JSX.create("slot", { name: "information", class: "information" }));
         /**
          * Wrapper element.
          */
-        this.wrapper = (DOM.create("div", { class: "wrapper" },
+        this.wrapper = (JSX.create("div", { class: "wrapper" },
             this.backgroundSlot,
             this.progressSlot,
             this.informationSlot));
         /**
          * Form styles.
          */
-        this.styles = (DOM.create("style", null, `:host > .wrapper {
+        this.styles = (JSX.create("style", null, `:host > .wrapper {
   position: relative;
   display: block;
   height: inherit;
 }
 :host > .wrapper > .progress,
-:host > .wrapper > .background {
+:host > .wrapper > .background,
+:host > .wrapper > .information {
   position: absolute;
   display: block;
   top: 0;
@@ -69,14 +70,15 @@ let Template = class Template extends Control.Component {
   height: 100%;
   width: 100%;
 }
-:host > .wrapper > .progress {
+:host > .wrapper > .progress,
+:host > .wrapper > .information {
   transition: width .25s;
   overflow: hidden;
   max-width: 100%;
   width: 0%;
 }
-:host > .wrapper > .information {
-  text-align: center;
+:host > .wrapper > .information::slotted(*) {
+  text-align: right;
 }
 :host > .wrapper > .progress::slotted(*),
 :host > .wrapper > .background::slotted(*),
@@ -87,8 +89,8 @@ let Template = class Template extends Control.Component {
         /**
          * Progress skeleton.
          */
-        this.skeleton = (DOM.create("div", { slot: this.properties.slot, class: this.properties.class }, this.children));
-        DOM.append(this.skeleton.attachShadow({ mode: 'closed' }), this.styles, this.wrapper);
+        this.skeleton = (JSX.create("div", { slot: this.properties.slot, class: this.properties.class }, this.children));
+        JSX.append(this.skeleton.attachShadow({ mode: 'closed' }), this.styles, this.wrapper);
         this.bindProperties();
         this.assignProperties();
     }
@@ -109,12 +111,15 @@ let Template = class Template extends Control.Component {
      * Change event handler.
      */
     changeHandler() {
-        this.states.percentage = (this.states.current * 100) / this.states.total;
-        this.progressSlot.style.width = `${this.states.percentage.toFixed(2)}%`;
+        const progress = (this.states.current * 100) / this.states.total;
+        const percentage = `${Math.trunc(progress) !== progress ? progress.toFixed(1) : progress}%`;
+        this.progressSlot.style.width = percentage;
+        this.informationSlot.style.width = percentage;
+        this.states.percentage = progress;
         const children = this.informationSlot.assignedNodes();
         for (const child of children) {
             if (child instanceof HTMLElement) {
-                child.innerText = `${this.states.percentage.toFixed(0)}%`;
+                child.innerText = percentage;
             }
         }
     }

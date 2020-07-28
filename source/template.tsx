@@ -1,9 +1,9 @@
 /**
- * Copyright (C) 2018 Silas B. Domingos
+ * Copyright (C) 2018-2020 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
 import * as Class from '@singleware/class';
-import * as DOM from '@singleware/jsx';
+import * as JSX from '@singleware/jsx';
 import * as Control from '@singleware/ui-control';
 
 import { Properties } from './properties';
@@ -30,19 +30,19 @@ export class Template extends Control.Component<Properties> {
    * Progress element.
    */
   @Class.Private()
-  private progressSlot = <slot name="progress" class="progress" /> as HTMLSlotElement;
+  private progressSlot = (<slot name="progress" class="progress" />) as HTMLSlotElement;
 
   /**
    * Background element.
    */
   @Class.Private()
-  private backgroundSlot = <slot name="background" class="background" /> as HTMLSlotElement;
+  private backgroundSlot = (<slot name="background" class="background" />) as HTMLSlotElement;
 
   /**
    * Information element.
    */
   @Class.Private()
-  private informationSlot = <slot name="information" class="information" /> as HTMLSlotElement;
+  private informationSlot = (<slot name="information" class="information" />) as HTMLSlotElement;
 
   /**
    * Wrapper element.
@@ -68,7 +68,8 @@ export class Template extends Control.Component<Properties> {
   height: inherit;
 }
 :host > .wrapper > .progress,
-:host > .wrapper > .background {
+:host > .wrapper > .background,
+:host > .wrapper > .information {
   position: absolute;
   display: block;
   top: 0;
@@ -76,14 +77,15 @@ export class Template extends Control.Component<Properties> {
   height: 100%;
   width: 100%;
 }
-:host > .wrapper > .progress {
+:host > .wrapper > .progress,
+:host > .wrapper > .information {
   transition: width .25s;
   overflow: hidden;
   max-width: 100%;
   width: 0%;
 }
-:host > .wrapper > .information {
-  text-align: center;
+:host > .wrapper > .information::slotted(*) {
+  text-align: right;
 }
 :host > .wrapper > .progress::slotted(*),
 :host > .wrapper > .background::slotted(*),
@@ -126,12 +128,15 @@ export class Template extends Control.Component<Properties> {
    */
   @Class.Private()
   private changeHandler(): void {
-    this.states.percentage = (this.states.current * 100) / this.states.total;
-    this.progressSlot.style.width = `${this.states.percentage.toFixed(2)}%`;
+    const progress = (this.states.current * 100) / this.states.total;
+    const percentage = `${Math.trunc(progress) !== progress ? progress.toFixed(1) : progress}%`;
+    this.progressSlot.style.width = percentage;
+    this.informationSlot.style.width = percentage;
+    this.states.percentage = progress;
     const children = this.informationSlot.assignedNodes();
     for (const child of children) {
       if (child instanceof HTMLElement) {
-        child.innerText = `${this.states.percentage.toFixed(0)}%`;
+        child.innerText = percentage;
       }
     }
   }
@@ -143,7 +148,7 @@ export class Template extends Control.Component<Properties> {
    */
   constructor(properties?: Properties, children?: any[]) {
     super(properties, children);
-    DOM.append(this.skeleton.attachShadow({ mode: 'closed' }), this.styles, this.wrapper);
+    JSX.append(this.skeleton.attachShadow({ mode: 'closed' }), this.styles, this.wrapper);
     this.bindProperties();
     this.assignProperties();
   }

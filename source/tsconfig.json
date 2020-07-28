@@ -3,13 +3,13 @@
     "target": "esnext",
     "module": "commonjs",
     "jsx": "react",
-    "jsxFactory": "DOM.create",
+    "jsxFactory": "JSX.create",
     "strict": true,
     "declaration": true,
     "experimentalDecorators": true,
     "suppressExcessPropertyErrors": true,
-    "outDir": "release/source",
-    "declarationDir": "release/types"
+    "outDir": "../release/source",
+    "declarationDir": "../release/types"
   },
-  "include": ["./source/**/*"]
+  "include": ["./**/*"]
 }
